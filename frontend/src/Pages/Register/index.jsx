@@ -6,6 +6,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialValues = {
     'name': '',
@@ -14,20 +15,29 @@ const initialValues = {
     'phone': '',
     'technology': '',
 }
+const phoneNumberRegEx = /^((?:[1-9][0-9 ().-]{5,28}[0-9])|(?:(00|0)( ){0,1}[1-9][0-9 ().-]{3,26}[0-9])|(?:(\+)( ){0,1}[1-9][0-9 ().-]{4,27}[0-9]))$/;
+
 const validationSchema = yup.object({
-    email: yup.
-        string()
-        .email('Enter email valid address')
-        .required('Please enter email address'),
-    password: yup
-        .string()
-        .required('Please enter password'),
     name: yup
-        .string()
-        .required('Please enter name'),
-    phone: yup
-        .number()
-        .required('Please enter phone')
+    .string()
+    .min(3, "Too Short !")
+    .max(30, "Too Long !")
+    .required("Required !"),
+
+  email: yup.string().email("Enter a Vaid Email").required("Email is Required"),
+
+  password: yup
+    .string()
+    .required("Enter Your Password")
+    // .matches(PasswordRegEx, "Uppercase Lowercase Special char Required")
+    .min(8, "Password Should be minimum 8 character")
+    .max(50, "Too long"),
+
+  phone: yup
+    .string()
+    // .matches(phoneNumberRegEx, "Invalid Phone Number")
+    .max(11, "Invalid Phone Number")
+    .required("Required !"),
 })
 
 const names = [
@@ -52,11 +62,11 @@ const Register = () => {
             .then((response) => {
                 localStorage.setItem('token', response.data.token)
                 toast.success(response.data.message)
+                navigator('/document')
             })
             .catch((err) => {
                 toast.error(err)
             })
-        navigator('/document')
     }
     const [techName, setTechName] = useState([]);
 

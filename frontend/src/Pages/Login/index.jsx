@@ -6,20 +6,23 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialValues = {
     'email': '',
     'password': ''
 }
 const validationSchema = yup.object({
-    email: yup.
-        string()
-        .email('Enter email valid address')
-        .required('Please enter email address'),
+    email: yup
+    .string('Enter your email')
+    .email('Enter a valid email')
+    .required('Email is required'),
     password: yup
-        .string()
-        .required('Please enter password')
-})
+    .string('Enter your password')
+    .min(8, 'Password should be of minimum 8 characters length')
+    .required('Password is required'),
+});
+
 const Login = () => {
     const navigator = useNavigate()
     const handleSubmit = async (values) => {
@@ -29,6 +32,7 @@ const Login = () => {
         }
         await axios.post('http://127.0.0.1:8000/api/login', body)
             .then((response) => {
+
                 localStorage.setItem('token', response.data.token)
                 toast.success(response.data.message)
                 navigator('document')

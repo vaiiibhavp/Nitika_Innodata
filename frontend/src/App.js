@@ -10,8 +10,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<PrivateRoutes />} >
-          <Route path="/document" element={<Document />} />
+          {/* <Route path="/document" element={<Document />} /> */}
         </Route>
+        <Route path="/document" element={<Document />} />
         <Route index path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
